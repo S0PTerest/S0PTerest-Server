@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  uid             String         @id @default(uuid())
+  uid             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name            String         @db.VarChar(100)
   email           String         @db.VarChar(100)
   profileImageUrl String
@@ -22,9 +22,9 @@ model User {
 }
 
 model Pin {
-  uid       String     @id @default(uuid())
+  uid       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   creator   User       @relation(fields: [creatorId], references: [uid])
-  creatorId String
+  creatorId String     @db.Uuid
   title     String     @db.VarChar(100)
   imageUrl  String
   boards    BoardPin[]
@@ -32,18 +32,18 @@ model Pin {
 }
 
 model Board {
-  uid    String     @id @default(uuid())
+  uid    String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user   User       @relation(fields: [userId], references: [uid])
-  userId String
+  userId String     @db.Uuid
   title  String     @db.VarChar(100)
   notes  Note[]
   pins   BoardPin[]
 }
 
 model Note {
-  uid         String    @id @default(uuid())
+  uid         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   board       Board     @relation(fields: [boardId], references: [uid])
-  boardId     String
+  boardId     String    @db.Uuid
   title       String    @db.VarChar(100)
   description String
   date        DateTime  @db.Date
@@ -51,25 +51,25 @@ model Note {
 }
 
 model BoardPin {
-  uid     String @id @default(uuid())
+  uid     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   board   Board  @relation(fields: [boardId], references: [uid])
-  boardId String
+  boardId String @db.Uuid
   pin     Pin    @relation(fields: [pinId], references: [uid])
-  pinId   String
+  pinId   String @db.Uuid
 }
 
 model NotePin {
-  uid    String @id @default(uuid())
+  uid    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   note   Note   @relation(fields: [noteId], references: [uid])
-  noteId String
+  noteId String @db.Uuid
   pin    Pin    @relation(fields: [pinId], references: [uid])
-  pinId  String
+  pinId  String @db.Uuid
 }
 
 model UserRelation {
-  uid         String @id @default(uuid())
+  uid         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   follower    User   @relation("followings", fields: [followerId], references: [uid])
-  followerId  String
+  followerId  String @db.Uuid
   following   User   @relation("followers", fields: [followingId], references: [uid])
-  followingId String
+  followingId String @db.Uuid
 }

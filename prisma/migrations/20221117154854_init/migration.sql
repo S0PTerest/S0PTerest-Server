@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "uid" TEXT NOT NULL,
+    "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" VARCHAR(100) NOT NULL,
     "email" VARCHAR(100) NOT NULL,
     "profileImageUrl" TEXT NOT NULL,
@@ -10,8 +10,8 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Pin" (
-    "uid" TEXT NOT NULL,
-    "creatorId" TEXT NOT NULL,
+    "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "creatorId" UUID NOT NULL,
     "title" VARCHAR(100) NOT NULL,
     "imageUrl" TEXT NOT NULL,
 
@@ -20,8 +20,8 @@ CREATE TABLE "Pin" (
 
 -- CreateTable
 CREATE TABLE "Board" (
-    "uid" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "userId" UUID NOT NULL,
     "title" VARCHAR(100) NOT NULL,
 
     CONSTRAINT "Board_pkey" PRIMARY KEY ("uid")
@@ -29,8 +29,8 @@ CREATE TABLE "Board" (
 
 -- CreateTable
 CREATE TABLE "Note" (
-    "uid" TEXT NOT NULL,
-    "boardId" TEXT NOT NULL,
+    "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "boardId" UUID NOT NULL,
     "title" VARCHAR(100) NOT NULL,
     "description" TEXT NOT NULL,
     "date" DATE NOT NULL,
@@ -40,27 +40,27 @@ CREATE TABLE "Note" (
 
 -- CreateTable
 CREATE TABLE "BoardPin" (
-    "uid" TEXT NOT NULL,
-    "boardId" TEXT NOT NULL,
-    "pinId" TEXT NOT NULL,
+    "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "boardId" UUID NOT NULL,
+    "pinId" UUID NOT NULL,
 
     CONSTRAINT "BoardPin_pkey" PRIMARY KEY ("uid")
 );
 
 -- CreateTable
 CREATE TABLE "NotePin" (
-    "uid" TEXT NOT NULL,
-    "noteId" TEXT NOT NULL,
-    "pinId" TEXT NOT NULL,
+    "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "noteId" UUID NOT NULL,
+    "pinId" UUID NOT NULL,
 
     CONSTRAINT "NotePin_pkey" PRIMARY KEY ("uid")
 );
 
 -- CreateTable
 CREATE TABLE "UserRelation" (
-    "uid" TEXT NOT NULL,
-    "followerId" TEXT NOT NULL,
-    "followingId" TEXT NOT NULL,
+    "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "followerId" UUID NOT NULL,
+    "followingId" UUID NOT NULL,
 
     CONSTRAINT "UserRelation_pkey" PRIMARY KEY ("uid")
 );
