@@ -35,9 +35,21 @@ const getBoardPins = async (req: Request, res: Response) => {
     .json({ status: 200, message: "보드에 속한 핀 조회 성공", data });
 };
 
+const getBoardNotes = async (req: Request, res: Response) => {
+  const { boardId } = req.params;
+  const notes = await boardService.getBoardNotes(boardId);
+
+  const data = {
+    notes,
+  };
+
+  return res.status(200).json({ status: 200, message: "노트 조회 성공", data });
+};
+
 const boardController = {
   getBoard,
   getBoardPins,
+  getBoardNotes,
 };
 
 export default boardController;
