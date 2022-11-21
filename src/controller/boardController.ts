@@ -62,10 +62,59 @@ const getBoardNotes = async (req: Request, res: Response) => {
   return res.status(200).json({ status: 200, message: "노트 조회 성공", data });
 };
 
+const createBoardNote = async (req: Request, res: Response) => {
+  const { boardId } = req.params;
+  const { title, description, date, pinIds } = req.body;
+
+  // boardId가 존재하는 uid인지 체크하고 404 반환해주기
+  // pinIds에서 존재하는 uid인지 체크하고 404 반환해주기
+  // date 형식 체크하기
+  const note = await boardService.createBoardNote(
+    boardId,
+    title,
+    description,
+    date,
+    pinIds
+  );
+
+  const data = {
+    note: {
+      ...req.body,
+      uid: note.uid,
+    },
+  };
+
+  return res.status(201).json({ status: 201, message: "노트 생성 성공", data });
+};
+
+const updateBoardNote = async (req: Request, res: Response) => {
+  const { boardId, noteId } = req.params;
+  const { title, description, date, pinIds } = req.body;
+  const note = await boardService.updateBoardNote(
+    noteId,
+    boardId,
+    title,
+    description,
+    date,
+    pinIds
+  );
+
+  const data = {
+    note: {
+      ...req.body,
+      uid: note.uid,
+    },
+  };
+
+  return res.status(200).json({ status: 200, message: "노트 수정 성공", data });
+};
+
 const boardController = {
   getBoard,
   getBoardPins,
   getBoardNotes,
+  createBoardNote,
+  updateBoardNote,
 };
 
 export default boardController;
