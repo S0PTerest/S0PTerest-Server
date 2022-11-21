@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,61 +12,61 @@ model User {
   name            String         @db.VarChar(100)
   email           String         @db.VarChar(100)
   profileImageUrl String
-  pins            Pin[]
   boards          Board[]
+  pins            Pin[]
   followings      UserRelation[] @relation("followings")
   followers       UserRelation[] @relation("followers")
 }
 
 model Pin {
   uid       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  creator   User       @relation(fields: [creatorId], references: [uid])
   creatorId String     @db.Uuid
   title     String     @db.VarChar(100)
   imageUrl  String
+  creator   User       @relation(fields: [creatorId], references: [uid])
   boards    BoardPin[]
   notes     NotePin[]
 }
 
 model Board {
   uid    String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user   User       @relation(fields: [userId], references: [uid])
   userId String     @db.Uuid
   title  String     @db.VarChar(100)
-  notes  Note[]
+  user   User       @relation(fields: [userId], references: [uid])
   pins   BoardPin[]
+  notes  Note[]
 }
 
 model Note {
   uid         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  board       Board     @relation(fields: [boardId], references: [uid])
   boardId     String    @db.Uuid
   title       String    @db.VarChar(100)
   description String
   date        DateTime  @db.Date
+  board       Board     @relation(fields: [boardId], references: [uid])
   pins        NotePin[]
 }
 
 model BoardPin {
   uid     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  board   Board  @relation(fields: [boardId], references: [uid])
   boardId String @db.Uuid
-  pin     Pin    @relation(fields: [pinId], references: [uid])
   pinId   String @db.Uuid
+  board   Board  @relation(fields: [boardId], references: [uid])
+  pin     Pin    @relation(fields: [pinId], references: [uid])
 }
 
 model NotePin {
   uid    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  note   Note   @relation(fields: [noteId], references: [uid])
   noteId String @db.Uuid
-  pin    Pin    @relation(fields: [pinId], references: [uid])
   pinId  String @db.Uuid
+  note   Note   @relation(fields: [noteId], references: [uid])
+  pin    Pin    @relation(fields: [pinId], references: [uid])
 }
 
 model UserRelation {
   uid         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  follower    User   @relation("followings", fields: [followerId], references: [uid])
   followerId  String @db.Uuid
-  following   User   @relation("followers", fields: [followingId], references: [uid])
   followingId String @db.Uuid
+  follower    User   @relation("followings", fields: [followerId], references: [uid])
+  following   User   @relation("followers", fields: [followingId], references: [uid])
 }
