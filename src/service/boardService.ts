@@ -55,10 +55,41 @@ const getBoardNotes = async (boardId: string) => {
   return result;
 };
 
+const createBoardNote = async (
+  boardId: string,
+  title: string,
+  description: string,
+  date: string,
+  pinIds: string[]
+) => {
+  const parsedDate = new Date(date);
+
+  const pinCreateList = pinIds.map((uid) => {
+    return {
+      pin: { connect: { uid: "4c67926c-2927-4c38-b670-af43498e1772" } },
+    };
+  });
+
+  const pin = await prisma.note.create({
+    data: {
+      boardId: boardId,
+      title: title,
+      description: description,
+      date: parsedDate,
+      pins: {
+        create: pinCreateList,
+      },
+    },
+  });
+
+  return pin;
+};
+
 const boardService = {
   getBoard,
   getBoardPin,
   getBoardNotes,
+  createBoardNote,
 };
 
 export default boardService;

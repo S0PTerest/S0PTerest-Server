@@ -62,10 +62,32 @@ const getBoardNotes = async (req: Request, res: Response) => {
   return res.status(200).json({ status: 200, message: "노트 조회 성공", data });
 };
 
+const createBoardNote = async (req: Request, res: Response) => {
+  const { boardId } = req.params;
+  const { title, description, date, pinIds } = req.body;
+  const note = await boardService.createBoardNote(
+    boardId,
+    title,
+    description,
+    date,
+    pinIds
+  );
+
+  const data = {
+    note: {
+      ...req.body,
+      uid: note.uid,
+    },
+  };
+
+  return res.status(201).json({ status: 201, message: "노트 생성 성공", data });
+};
+
 const boardController = {
   getBoard,
   getBoardPins,
   getBoardNotes,
+  createBoardNote,
 };
 
 export default boardController;
