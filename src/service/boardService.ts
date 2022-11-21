@@ -66,7 +66,7 @@ const createBoardNote = async (
 
   const pinCreateList = pinIds.map((uid) => {
     return {
-      pin: { connect: { uid: "4c67926c-2927-4c38-b670-af43498e1772" } },
+      pin: { connect: { uid: uid } },
     };
   });
 
@@ -97,11 +97,16 @@ const updateBoardNote = async (
 
   const pinCreateList = pinIds.map((uid) => {
     return {
-      pin: { connect: { uid: "4c67926c-2927-4c38-b670-af43498e1772" } },
+      pin: { connect: { uid: uid } },
     };
   });
 
   // TODO 기존에 note와 pin 연결 삭제
+  const del = await prisma.notePin.deleteMany({
+    where: {
+      noteId: noteId,
+    },
+  });
 
   const note = await prisma.note.update({
     where: {
