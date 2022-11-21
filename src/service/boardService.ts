@@ -35,12 +35,19 @@ const getBoardNotes = async (boardId: string) => {
       description: true,
       date: true,
       pins: {
-        include: {
-          pin: true,
+        select: {
+          pin: {
+            select: {
+              uid: true,
+              title: true,
+              imageUrl: true,
+            },
+          },
         },
       },
     },
   });
+
   const result = notes.map((note) => {
     return { ...note, pins: note.pins.map((pin) => pin.pin) };
   });
