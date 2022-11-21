@@ -70,7 +70,7 @@ const createBoardNote = async (
     };
   });
 
-  const pin = await prisma.note.create({
+  const note = await prisma.note.create({
     data: {
       boardId: boardId,
       title: title,
@@ -82,7 +82,43 @@ const createBoardNote = async (
     },
   });
 
-  return pin;
+  return note;
+};
+
+const updateBoardNote = async (
+  noteId: string,
+  boardId: string,
+  title: string,
+  description: string,
+  date: string,
+  pinIds: string[]
+) => {
+  const parsedDate = new Date(date);
+
+  const pinCreateList = pinIds.map((uid) => {
+    return {
+      pin: { connect: { uid: "4c67926c-2927-4c38-b670-af43498e1772" } },
+    };
+  });
+
+  // TODO 기존에 note와 pin 연결 삭제
+
+  const note = await prisma.note.update({
+    where: {
+      uid: noteId,
+    },
+    data: {
+      boardId: boardId,
+      title: title,
+      description: description,
+      date: parsedDate,
+      pins: {
+        create: pinCreateList,
+      },
+    },
+  });
+
+  return note;
 };
 
 const boardService = {
@@ -90,6 +126,7 @@ const boardService = {
   getBoardPin,
   getBoardNotes,
   createBoardNote,
+  updateBoardNote,
 };
 
 export default boardService;
