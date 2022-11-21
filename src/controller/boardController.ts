@@ -35,9 +35,25 @@ const getBoardPins = async (req: Request, res: Response) => {
     .json({ status: 200, message: "보드에 속한 핀 조회 성공", data });
 };
 
+const dateParser = (inputDate: Date) => {
+  const year = inputDate.getFullYear();
+  const month = inputDate.getMonth();
+  const date = inputDate.getDate();
+  const weekdayMatch = ["일", "월", "화", "수", "목", "금", "토"];
+  const weekday = weekdayMatch[inputDate.getDay()];
+  const parsedDate =
+    year + "년 " + month + "월 " + date + "일 " + "(" + weekday + ")";
+  return parsedDate;
+};
+
 const getBoardNotes = async (req: Request, res: Response) => {
   const { boardId } = req.params;
   const notes = await boardService.getBoardNotes(boardId);
+  for (let note of notes) {
+    let noteDate = note.date;
+    let parsedNoteDate = dateParser(noteDate);
+    note.date = parsedNoteDate as any; // date라 할당할 수 없어서
+  }
 
   const data = {
     notes,
