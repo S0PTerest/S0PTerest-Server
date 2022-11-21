@@ -24,9 +24,41 @@ const getBoardPin = async (boardId: string) => {
   return pin;
 };
 
+const getBoardNotes = async (boardId: string) => {
+  const notes = await prisma.note.findMany({
+    where: {
+      boardId: boardId,
+    },
+    select: {
+      uid: true,
+      title: true,
+      description: true,
+      date: true,
+      pins: {
+        select: {
+          pin: {
+            select: {
+              uid: true,
+              title: true,
+              imageUrl: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const result = notes.map((note) => {
+    return { ...note, pins: note.pins.map((pin) => pin.pin) };
+  });
+
+  return result;
+};
+
 const boardService = {
   getBoard,
   getBoardPin,
+  getBoardNotes,
 };
 
 export default boardService;
