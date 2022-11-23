@@ -126,6 +126,15 @@ const updateBoardNote = async (req: Request, res: Response) => {
     });
   }
 
+  // noteId가 존재하는 uid인지 체크하고 404 반환해주기
+  const existNote = await boardService.getNotedById(noteId);
+  if (!existNote) {
+    return res.status(404).json({
+      status: 404,
+      message: noteId + "는 존재하지 않는 Note의 Id입니다",
+    });
+  }
+
   // pinIds에서 존재하는 uid인지 체크하고 404 반환해주기
   const validPinCount = await boardService.getValidPinCount(boardId, pinIds);
   if (validPinCount != pinIds.length) {
