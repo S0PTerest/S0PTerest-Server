@@ -88,6 +88,13 @@ const createBoardNote = async (req: Request, res: Response) => {
   }
 
   // date 형식 체크하기
+  if (date.match(/^\d{4}-\d{2}-\d{2}$/) == null) {
+    return res.status(400).json({
+      status: 400,
+      message: "date 형식이 YYYY-MM-DD가 아닙니다",
+    });
+  }
+
   const note = await boardService.createBoardNote(
     boardId,
     title,
