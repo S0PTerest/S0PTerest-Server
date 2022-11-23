@@ -6,6 +6,20 @@ const getBoard = async (userId: string) => {
     where: {
       userId: userId,
     },
+    select: {
+      uid: true,
+      userId: true,
+      title: true,
+      pins: {
+        select: {
+          pin: {
+            select: {
+              imageUrl: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   return board;
