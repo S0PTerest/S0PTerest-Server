@@ -67,6 +67,14 @@ const createBoardNote = async (req: Request, res: Response) => {
   const { title, description, date, pinIds } = req.body;
 
   // boardId가 존재하는 uid인지 체크하고 404 반환해주기
+  const board = await boardService.getBoardById(boardId);
+  if (!board) {
+    return res.status(404).json({
+      status: 404,
+      message: boardId + "는 존재하지 않는 Board의 Id입니다",
+    });
+  }
+
   // pinIds에서 존재하는 uid인지 체크하고 404 반환해주기
   // date 형식 체크하기
   const note = await boardService.createBoardNote(

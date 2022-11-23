@@ -85,6 +85,15 @@ const createBoardNote = async (
   return note;
 };
 
+const getBoardById = async (boardId: string) => {
+  const board = prisma.board.findUnique({
+    where: {
+      uid: boardId,
+    },
+  });
+  return board;
+};
+
 const updateBoardNote = async (
   noteId: string,
   boardId: string,
@@ -131,6 +140,7 @@ const boardService = {
   getBoardPin,
   getBoardNotes,
   createBoardNote,
+  getBoardById,
   updateBoardNote,
 };
 
