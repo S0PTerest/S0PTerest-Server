@@ -37,7 +37,7 @@ const getBoardPins = async (req: Request, res: Response) => {
 
 const dateParser = (inputDate: Date) => {
   const year = inputDate.getFullYear();
-  const month = inputDate.getMonth();
+  const month = inputDate.getMonth() + 1;
   const date = inputDate.getDate();
   const weekdayMatch = ["일", "월", "화", "수", "목", "금", "토"];
   const weekday = weekdayMatch[inputDate.getDay()];
