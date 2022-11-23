@@ -2,9 +2,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import router from "./router";
 
-
 //const app = express(); // express 객체 받아옴
-const PORT = 3001; // 사용할 port를 3000번으로 설정
+const PORT = 300; // 사용할 port를 3000번으로 설정
 var app = express();
 var cors = require("cors");
 app.use(cors());
