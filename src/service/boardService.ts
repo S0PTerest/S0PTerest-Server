@@ -26,16 +26,30 @@ const getBoard = async (userId: string) => {
 };
 
 const getBoardPin = async (boardId: string) => {
-  const pin = await prisma.boardPin.findMany({
+  const pins = await prisma.boardPin.findMany({
     where: {
       boardId: boardId,
     },
-    include: {
-      pin: true,
+    select: {
+      pin: {
+        select: {
+          uid: true,
+          title: true,
+          imageUrl: true,
+          creator: {
+            select: {
+              uid: true,
+              name: true,
+              email: true,
+              profileImageUrl: true,
+            },
+          },
+        },
+      },
     },
   });
 
-  return pin;
+  return pins;
 };
 
 const getBoardNotes = async (boardId: string) => {
