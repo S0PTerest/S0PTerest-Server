@@ -53,6 +53,8 @@ model BoardPin {
   pinId   String @db.Uuid
   board   Board  @relation(fields: [boardId], references: [uid])
   pin     Pin    @relation(fields: [pinId], references: [uid])
+
+  @@unique([boardId, pinId])
 }
 
 model NotePin {
@@ -61,6 +63,8 @@ model NotePin {
   pinId  String @db.Uuid
   note   Note   @relation(fields: [noteId], references: [uid])
   pin    Pin    @relation(fields: [pinId], references: [uid])
+
+  @@unique([noteId, pinId])
 }
 
 model UserRelation {

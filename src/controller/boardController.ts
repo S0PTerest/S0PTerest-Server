@@ -10,9 +10,7 @@ const getBoard = async (req: Request, res: Response) => {
   }
 
   const data = {
-    board: {
-      ...board,
-    },
+    board,
   };
 
   return res.status(200).json({ status: 200, message: "보드 조회 성공", data });
@@ -67,8 +65,34 @@ const createBoardNote = async (req: Request, res: Response) => {
   const { title, description, date, pinIds } = req.body;
 
   // boardId가 존재하는 uid인지 체크하고 404 반환해주기
+  const board = await boardService.getBoardById(boardId);
+  if (!board) {
+    return res.status(404).json({
+      status: 404,
+      message: boardId + "는 존재하지 않는 Board의 Id입니다",
+    });
+  }
+
   // pinIds에서 존재하는 uid인지 체크하고 404 반환해주기
+  const validPinCount = await boardService.getValidPinCount(boardId, pinIds);
+  if (validPinCount != pinIds.length) {
+    return res.status(404).json({
+      status: 404,
+      message:
+        "Id가 " +
+        boardId +
+        "인 Board에 속하지 않거나 존재하지 않는 Pin의 Id가 있습니다",
+    });
+  }
+
   // date 형식 체크하기
+  if (date.match(/^\d{4}-\d{2}-\d{2}$/) == null) {
+    return res.status(400).json({
+      status: 400,
+      message: "date 형식이 YYYY-MM-DD가 아닙니다",
+    });
+  }
+
   const note = await boardService.createBoardNote(
     boardId,
     title,
@@ -90,6 +114,45 @@ const createBoardNote = async (req: Request, res: Response) => {
 const updateBoardNote = async (req: Request, res: Response) => {
   const { boardId, noteId } = req.params;
   const { title, description, date, pinIds } = req.body;
+
+  // boardId가 존재하는 uid인지 체크하고 404 반환해주기
+  const board = await boardService.getBoardById(boardId);
+  if (!board) {
+    return res.status(404).json({
+      status: 404,
+      message: boardId + "는 존재하지 않는 Board의 Id입니다",
+    });
+  }
+
+  // noteId가 존재하는 uid인지 체크하고 404 반환해주기
+  const existNote = await boardService.getNotedById(noteId);
+  if (!existNote) {
+    return res.status(404).json({
+      status: 404,
+      message: noteId + "는 존재하지 않는 Note의 Id입니다",
+    });
+  }
+
+  // pinIds에서 존재하는 uid인지 체크하고 404 반환해주기
+  const validPinCount = await boardService.getValidPinCount(boardId, pinIds);
+  if (validPinCount != pinIds.length) {
+    return res.status(404).json({
+      status: 404,
+      message:
+        "Id가 " +
+        boardId +
+        "인 Board에 속하지 않거나 존재하지 않는 Pin의 Id가 있습니다",
+    });
+  }
+
+  // date 형식 체크하기
+  if (date.match(/^\d{4}-\d{2}-\d{2}$/) == null) {
+    return res.status(400).json({
+      status: 400,
+      message: "date 형식이 YYYY-MM-DD가 아닙니다",
+    });
+  }
+
   const note = await boardService.updateBoardNote(
     noteId,
     boardId,

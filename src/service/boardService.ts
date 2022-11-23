@@ -6,6 +6,20 @@ const getBoard = async (userId: string) => {
     where: {
       userId: userId,
     },
+    select: {
+      uid: true,
+      userId: true,
+      title: true,
+      pins: {
+        select: {
+          pin: {
+            select: {
+              imageUrl: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   return board;
@@ -85,6 +99,41 @@ const createBoardNote = async (
   return note;
 };
 
+const getBoardById = async (boardId: string) => {
+  const board = prisma.board.findUnique({
+    where: {
+      uid: boardId,
+    },
+  });
+  return board;
+};
+
+const getNotedById = async (noteId: string) => {
+  const note = prisma.note.findUnique({
+    where: {
+      uid: noteId,
+    },
+  });
+  return note;
+};
+
+const getValidPinCount = async (boardId: string, pinIds: string[]) => {
+  const ValidPinCount = prisma.pin.count({
+    where: {
+      uid: {
+        in: pinIds,
+      },
+      boards: {
+        some: {
+          boardId: boardId,
+        },
+      },
+    },
+  });
+
+  return ValidPinCount;
+};
+
 const updateBoardNote = async (
   noteId: string,
   boardId: string,
@@ -131,6 +180,9 @@ const boardService = {
   getBoardPin,
   getBoardNotes,
   createBoardNote,
+  getBoardById,
+  getNotedById,
+  getValidPinCount,
   updateBoardNote,
 };
 
