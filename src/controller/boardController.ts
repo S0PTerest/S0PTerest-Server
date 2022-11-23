@@ -10,9 +10,7 @@ const getBoard = async (req: Request, res: Response) => {
   }
 
   const data = {
-    board: {
-      ...board,
-    },
+    board,
   };
 
   return res.status(200).json({ status: 200, message: "보드 조회 성공", data });

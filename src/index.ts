@@ -2,8 +2,22 @@
 import express, { NextFunction, Request, Response } from "express";
 import router from "./router";
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 const app = express(); // express 객체 받아옴
 const PORT = 3000; // 사용할 port를 3000번으로 설정
+=======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+//const app = express(); // express 객체 받아옴
+const PORT = 3001; // 사용할 port를 3000번으로 설정
+var app = express();
+var cors = require("cors");
+app.use(cors());
+>>>>>>> Stashed changes
 
 app.use(express.json()); // express 에서 request body를 json 으로 받아오겠다.
 
