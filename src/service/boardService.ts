@@ -94,6 +94,23 @@ const getBoardById = async (boardId: string) => {
   return board;
 };
 
+const getValidPinCount = async (boardId: string, pinIds: string[]) => {
+  const ValidPinCount = prisma.pin.count({
+    where: {
+      uid: {
+        in: pinIds,
+      },
+      boards: {
+        some: {
+          boardId: boardId,
+        },
+      },
+    },
+  });
+
+  return ValidPinCount;
+};
+
 const updateBoardNote = async (
   noteId: string,
   boardId: string,
@@ -141,6 +158,7 @@ const boardService = {
   getBoardNotes,
   createBoardNote,
   getBoardById,
+  getValidPinCount,
   updateBoardNote,
 };
 

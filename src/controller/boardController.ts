@@ -76,6 +76,17 @@ const createBoardNote = async (req: Request, res: Response) => {
   }
 
   // pinIds에서 존재하는 uid인지 체크하고 404 반환해주기
+  const validPinCount = await boardService.getValidPinCount(boardId, pinIds);
+  if (validPinCount != pinIds.length) {
+    return res.status(404).json({
+      status: 404,
+      message:
+        "Id가 " +
+        boardId +
+        "인 Board에 속하지 않거나 존재하지 않는 Pin의 Id가 있습니다",
+    });
+  }
+
   // date 형식 체크하기
   const note = await boardService.createBoardNote(
     boardId,
