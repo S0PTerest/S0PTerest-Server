@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const getBoard = async (userId: string) => {
-  const board = await prisma.board.findMany({
+  const boards = await prisma.board.findMany({
     where: {
       userId: userId,
     },
@@ -22,28 +22,32 @@ const getBoard = async (userId: string) => {
     },
   });
 
-  return board;
+  const result = boards.map((board) => {
+    return { ...board, pins: board.pins.map((pin) => pin.pin) };
+  });
+
+  return result;
 };
 
 const getBoardPin = async (boardId: string) => {
-  const pins = await prisma.boardPin.findMany({
+  const pins = await prisma.pin.findMany({
     where: {
-      boardId: boardId,
+      boards: {
+        some: {
+          boardId: boardId,
+        },
+      },
     },
     select: {
-      pin: {
+      uid: true,
+      title: true,
+      imageUrl: true,
+      creator: {
         select: {
           uid: true,
-          title: true,
-          imageUrl: true,
-          creator: {
-            select: {
-              uid: true,
-              name: true,
-              email: true,
-              profileImageUrl: true,
-            },
-          },
+          name: true,
+          email: true,
+          profileImageUrl: true,
         },
       },
     },
